@@ -1,17 +1,30 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Table } from "reactstrap";
-import { getServiceTicket } from "../../data/serviceTicketsData";
+import { getServiceTicket, getTicketDetailsFetch } from "../../data/serviceTicketsData";
 
 export default function TicketDetails() {
   const { id } = useParams();
-
   const [ticket, setTicket] = useState(null);
+  const getATicketsDetails = () => {
+    getTicketDetailsFetch(id).then(setTicket)
+  }
 
   //add useEffect here to get the ticket details from the API
+  useEffect(() => {
+    getATicketsDetails();
+  }, [id]);
 
   if (!ticket) {
     return null;
+  }
+
+  const formatDate = (dateString) => {
+    if (!dateString) {
+      return "Incomplete";
+    }
+    const date = new Date(dateString);
+    return date.toLocaleDateString();
   }
 
   return (
@@ -35,7 +48,7 @@ export default function TicketDetails() {
         </tr>
         <tr>
           <th scope="row">Completed?</th>
-          <td>{ticket.dateCompleted?.split("T")[0] || "Incomplete"}</td>
+          <td>{formatDate(ticket.dateComplete)}</td> 
         </tr>
       </tbody>
     </Table>
