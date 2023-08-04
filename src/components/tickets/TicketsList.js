@@ -10,6 +10,14 @@ export default function TicketsList() {
     getServiceTickets().then(setTickets);
   }, []);
 
+  const formatDate = (dateString) => {
+    if (!dateString) {
+      return "Incomplete";
+    }
+    const date = new Date(dateString);
+    return date.toLocaleDateString();
+  }
+
   return (
     <Table>
       <thead>
@@ -27,7 +35,7 @@ export default function TicketsList() {
             <th scope="row">{t.id}</th>
             <td>{t.description}</td>
             <td>{t.emergency ? "yes" : "no"}</td>
-            <td>{t.dateCompleted?.split("T")[0] || "Incomplete"}</td>
+            <td>{formatDate(t.dateComplete)}</td> 
             <td>
               <Link to={`${t.id}`}>Details</Link>
             </td>
