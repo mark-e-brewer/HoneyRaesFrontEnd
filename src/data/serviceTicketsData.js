@@ -22,9 +22,19 @@ const getAllEmployees = () => {
     });
 };
 
+const getEmployeeDetails = (id) => {
+  return fetch(`/employees/${id}`).then((r) => r.json());
+}
+
+const getCustomerDetails = (id) => {
+  return fetch(`/customer/${id}`).then((r) => r.json());
+}
+
 export {
   getServiceTickets,
   getTicketDetailsFetch,
   getAllCustomers,
   getAllEmployees,
+  getEmployeeDetails,
+  getCustomerDetails,
 };
