@@ -1,13 +1,18 @@
 import { useEffect, useState } from "react";
 import { Table } from "reactstrap";
-import { getServiceTickets } from "../../data/serviceTicketsData";
+import { getServiceTickets, deleteTicket, setTicketAsComplete } from "../../data/serviceTicketsData";
 import { Link } from "react-router-dom";
 
 export default function TicketsList() {
   const [tickets, setTickets] = useState([]);
+  const getAllServiceTickets = () => {
+    getServiceTickets().then(setTickets);
+  }
 
   useEffect(() => {
-    getServiceTickets().then(setTickets);
+    getAllServiceTickets()?.then((data) => {
+      setTickets(data)
+    });
   }, []);
 
   const formatDate = (dateString) => {
@@ -16,6 +21,14 @@ export default function TicketsList() {
     }
     const date = new Date(dateString);
     return date.toLocaleDateString();
+  }
+
+  const deleteThisTicket = (id) => {
+    deleteTicket(id).then(() => getAllServiceTickets())
+  }
+
+  const markAsComplete = (id) => {
+    setTicketAsComplete(id).then(() => getAllServiceTickets())
   }
 
   return (
@@ -39,6 +52,11 @@ export default function TicketsList() {
             <td>
               <Link to={`${t.id}`}>Details</Link>
             </td>
+            <td>
+              <button type="button" onClick={() => markAsComplete(t.id)}>Complete</button>
+            </td>
+            {/*USE ARROW FUNCTION SO ITS DOESNT AUTOMATICLY CALL AND DELETE ALL TICKETS*/}
+            <td><button type="button" onClick={() => deleteThisTicket(t.id)}>Delete</button></td>
           </tr>
         ))}
       </tbody>
